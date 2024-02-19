@@ -1,2 +1,2 @@
 [prod]
- 172.31.93.68 
+ 172.31.93.68 ansible_user=ubunutu
