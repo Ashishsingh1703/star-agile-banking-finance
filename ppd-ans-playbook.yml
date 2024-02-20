@@ -1,30 +1,22 @@
-- name: Configure Docker on EC2 Instances
-  hosts: all
+- name: Pull and Start Docker Container
+  hosts: ppd-server
   become: true
   tasks:
-    - name: Updating apt
-      apt:
-        update_cache: yes
-
-    - name: Install Docker
-      apt:
-        name: docker.io
-        state: present
-
-    - name: Start Docker Service
-      service:
-        name: docker
-        state: started
-
     - name: Pull Latest Docker Image
       docker_image:
-        name: ashishkr1703/banking:latest
+        name: ashishkr1703/banking:{{ DOCKER_TAG }}
         source: pull
 
-    - name: Deploy Docker Container
+    - name: Stop Existing Docker Container (if exists)
       docker_container:
         name: banking_container
-        image: "ashishkr1703/banking:latest"
+        state: absent
+      ignore_errors: yes  # Ignore errors if the container doesn't exist
+
+    - name: Start Docker Container
+      docker_container:
+        name: banking_container
+        image: "ashishkr1703/banking:{{ DOCKER_TAG }}"
         ports:
           - "8084:8081"
         state: started
