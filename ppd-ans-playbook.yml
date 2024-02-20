@@ -1,4 +1,4 @@
-- name: Pull and Start Docker Container
+- name: Deploy Docker Container
   hosts: ppd-server
   become: true
   tasks:
@@ -7,7 +7,7 @@
         name: ashishkr1703/banking:{{ DOCKER_TAG }}
         source: pull
 
-    - name: Stop Existing Docker Container (if exists)
+    - name: Stop and Remove Existing Docker Container (if exists)
       docker_container:
         name: banking_container
         state: absent
