@@ -30,7 +30,7 @@
     - name: Deploy Docker Container
       docker_container:
         name: banking_container
-        image: "moreaniket/banking:{{ DOCKER_TAG }}"
+        image: "ashishkumarsingh1703/ashish:{{ DOCKER_TAG }}"
         ports:
           - "8084:8081"
         state: started
