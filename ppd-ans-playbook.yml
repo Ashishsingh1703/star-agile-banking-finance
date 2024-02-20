@@ -7,11 +7,25 @@
         name: ashishkr1703/banking:{{ DOCKER_TAG }}
         source: pull
 
-    - name: Stop and Remove Existing Docker Container (if exists)
+    - name: Stop Existing Docker Container (if exists)
+      docker_container:
+        name: banking_container
+        state: stopped
+      ignore_errors: yes  # Ignore errors if the container doesn't exist
+
+    - name: Remove Existing Docker Container (if exists)
       docker_container:
         name: banking_container
         state: absent
       ignore_errors: yes  # Ignore errors if the container doesn't exist
+
+    - name: Remove old Docker images
+      community.general.docker_prune:
+        networks: no
+        containers: yes
+        volumes: yes
+        images: yes
+        networks: yes
 
     - name: Start Docker Container
       docker_container:
