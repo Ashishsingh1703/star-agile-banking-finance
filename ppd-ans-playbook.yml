@@ -1,12 +1,12 @@
+# ppd-ans-playbook.yml
+
 - name: Deploy Docker Container
   hosts: ppd-server
   become: true
   tasks:
     - name: Pull Latest Docker Image
-      docker_image:
-        name: ashishkr1703/banking:latest
-        source: pull
-
+      shell: docker pull ashishkr1703/banking:latest
+      
     - name: Stop and Remove Existing Docker Container
       ansible.builtin.docker_container:
         name: banking_container
