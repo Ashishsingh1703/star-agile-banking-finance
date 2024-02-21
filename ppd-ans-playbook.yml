@@ -18,5 +18,5 @@
         name: banking_container
         image: "ashishkr1703/banking:latest"
         ports:
-          - "8084:8081"
+          - "8087:8081"
         state: started
