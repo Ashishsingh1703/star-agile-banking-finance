@@ -26,7 +26,6 @@
         containers: yes
         volumes: yes
         images: yes
-        networks: yes
 
     - name: Start Docker Container
       docker_container:
