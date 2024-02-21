@@ -8,8 +8,9 @@
         source: pull
 
     - name: Stop and Remove Existing Docker Container (if exists)
-      shell: docker stop banking_container && docker rm banking_container
-      ignore_errors: yes  # Ignore errors if the container doesn't exist
+      docker_container:
+        name: banking_container
+        state: absent
 
     - name: Remove old Docker images
       community.general.docker_prune:
@@ -26,3 +27,4 @@
         ports:
           - "8084:8081"
         state: started
+
