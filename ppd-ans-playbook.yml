@@ -9,10 +9,12 @@
         source: pull
 
     - name: Stop and Remove Existing Docker Container (if exists)
-      docker_container:
-        name: banking_container
-        state: stopped
-      ignore_errors: yes  # Ignore errors if the container doesn't exist
+  docker_container:
+    name: banking_container
+    state: stopped
+    container_default_behavior: compatibility  # Explicitly specify the value
+  ignore_errors: yes  # Ignore errors if the container doesn't exist
+
 
     - name: Remove Existing Docker Container (if exists)
       docker_container:
