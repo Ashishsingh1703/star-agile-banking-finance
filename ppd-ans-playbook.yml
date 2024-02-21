@@ -7,12 +7,16 @@
         name: ashishkr1703/banking:{{ DOCKER_TAG }}
         source: pull
 
-    - name: Stop and Remove Existing Docker Container (if exists)
-      shell: docker stop banking_container && docker rm banking_container
-      ignore_errors: yes  # Ignore errors if the container doesn't exist
+    - name: Check if container exists
+      shell: docker inspect --type container banking_container
+      register: docker_container_info
+      ignore_errors: yes
 
-    - name: Remove old Docker images
-      shell: docker system prune -af
+    - name: Stop and remove existing container
+      docker_container:
+        name: banking_container
+        state: absent
+      when: docker_container_info.rc == 0
 
     - name: Start Docker Container
       docker_container:
