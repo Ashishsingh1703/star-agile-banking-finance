@@ -1,23 +1,37 @@
+---
 - name: Deploy Docker Container
   hosts: ppd-server
   become: true
   tasks:
     - name: Pull Latest Docker Image
       docker_image:
-        name: ashishkr1703/banking:{{ DOCKER_TAG }}
+        name: ashishkr1703/banking:latest
         source: pull
 
     - name: Stop and Remove Existing Docker Container (if exists)
-      shell: docker stop banking_container && docker rm banking_container
+      docker_container:
+        name: banking_container
+        state: stopped
+      ignore_errors: yes  # Ignore errors if the container doesn't exist
+
+    - name: Remove Existing Docker Container (if exists)
+      docker_container:
+        name: banking_container
+        state: absent
       ignore_errors: yes  # Ignore errors if the container doesn't exist
 
     - name: Remove old Docker images
-      shell: docker system prune -af
+      community.general.docker_prune:
+        networks: no
+        containers: yes
+        volumes: yes
+        images: yes
+        networks: yes
 
     - name: Start Docker Container
       docker_container:
         name: banking_container
-        image: "ashishkr1703/banking:{{ DOCKER_TAG }}"
+        image: "ashishkr1703/banking:latest"
         ports:
           - "8084:8081"
         state: started
