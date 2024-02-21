@@ -1,36 +1,36 @@
-- name: Deploy Docker Container
+- name: Configure Docker on EC2 Instances
   hosts: ppd-server
   become: true
   tasks:
-    - name: Pull Latest Docker Image
-      docker_image:
-        name: ashishkr1703/banking:latest
-        source: pull
+    - name: Updating apt
+      apt:
+        update_cache: yes
 
-    - name: Stop and Remove Existing Docker Container (if exists)
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker Service
+      service:
+        name: docker
+        state: started
+
+    - name: Install pip3
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install Docker SDK for Python
+      pip:
+        name: docker
+        executable: pip3
+        state: present
+
+    - name: Deploy Docker Container
       docker_container:
         name: banking_container
-        state: stopped
-        container_default_behavior: compatibility  # Explicitly specify the value
-      ignore_errors: yes  # Ignore errors if the container doesn't exist
-
-    - name: Remove Existing Docker Container (if exists)
-      docker_container:
-        name: banking_container
-        state: absent
-      ignore_errors: yes  # Ignore errors if the container doesn't exist
-
-    - name: Remove old Docker images
-      community.general.docker_prune:
-        networks: no
-        containers: yes
-        volumes: yes
-        images: yes
-
-    - name: Start Docker Container
-      docker_container:
-        name: banking_container
-        image: "ashishkr1703/banking:latest"
+        image: "ashishkr1703/banking:{{ DOCKER_TAG }}"
         ports:
           - "8084:8081"
         state: started
