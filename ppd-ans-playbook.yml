@@ -8,15 +8,7 @@
         source: pull
 
     - name: Stop and Remove Existing Docker Container (if exists)
-      docker_container:
-        name: banking_container
-        state: stopped
-      ignore_errors: yes  # Ignore errors if the container doesn't exist
-
-    - name: Remove Existing Docker Container (if exists)
-      docker_container:
-        name: banking_container
-        state: absent
+      shell: docker stop banking_container && docker rm banking_container
       ignore_errors: yes  # Ignore errors if the container doesn't exist
 
     - name: Remove old Docker images
