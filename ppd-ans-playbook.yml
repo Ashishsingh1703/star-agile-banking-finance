@@ -1,19 +1,3 @@
-- name: Stop and remove existing container
-  hosts: ppd-server
-  become: true
-  tasks:
-    - name: Stop Docker container if running
-      docker_container:
-        name: banking_container
-        state: stopped
-      ignore_errors: yes  # Ignore errors if container is not running
-
-    - name: Remove Docker container if exists
-      docker_container:
-        name: banking_container
-        state: absent
-      ignore_errors: yes  # Ignore errors if container does not exist
-
 - name: Configure Docker on EC2 Instances
   hosts: all
   become: true
