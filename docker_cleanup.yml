@@ -1,6 +1,6 @@
 ---
 - name: Stop and remove Docker containers
-  hosts: ppd-server
+  hosts: all
   tasks:
     - name: Stop running containers
       shell: docker stop $(docker ps -q)
