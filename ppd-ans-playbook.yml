@@ -1,5 +1,5 @@
 - name: Configure Docker on EC2 Instances
-  hosts: ppd-server
+  hosts: all
   become: true
   tasks:
     - name: Updating apt
@@ -27,10 +27,13 @@
         executable: pip3
         state: present
 
+    - name: Pull Latest Docker Image from DockerHub
+      command: docker pull ashishkr1703/banking:latest
+
     - name: Deploy Docker Container
       docker_container:
         name: banking_container
-        image: "ashishkr1703/banking:{{ DOCKER_LATEST_TAG }}"
+        image: "ashishkr1703/banking:latest"
         ports:
           - "8084:8081"
         state: started
